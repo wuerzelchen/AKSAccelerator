@@ -9,28 +9,34 @@ Navigate to ./Environment/Shared/, open a terminal and execute the following com
 1. Init terraform with `terraform init`
 2. Terraform apply `terraform apply`
 3. Save terraform output into variables
-    - Windows Powershell: 
+    - Bash:
+        - `acr_name=$(terraform output -raw acr_name)`
+        - `resource_group_name=$(terraform output -raw resource_group_name)`
+    - Powershell: 
         - `$acr_name = (& terraform output -raw acr_name)`
         - `$resource_group_name = (& terraform output -raw resource_group_name)`
 4. Import container into acr
-    - Windows Powershell: 
+    - Bash & Powershell:
         - `az acr import --name "$acr_name" --resource-group "$resource_group_name" --source mcr.microsoft.com/azuredocs/aci-helloworld --image aci-helloworld`
+
 
 ## Day 1
 Navigate to ./Environment/Day1/, open a terminal and execute the following commands:
 1. Initialise terraform with `terraform init`
-2. Apply everything to your environment with `terraform apply`
+2. Apply everything to your environment with `terraform apply -var acr_name=$acr_name`
 
 ## Day 2
 Navigate to ./Environment/Day2/, open a terminal and execute the following commands:
 1. Initialise terraform with `terraform init`
 2. Apply everything to your environment
-    - Windows Powershell: 
+    - Bash & Powershell: 
         - `terraform apply -var acr_name=$acr_name`
 3. Save terraform output into variables
-    - Windows Powershell:
+    - Bash
+        - `aks_name=$(terraform output -raw aks_name)`
+    - Powershell:
         - `$aks_name = (& terraform output -raw aks_name)`
 4. Log in to your fresh aks cluster
-    - Windows Powershell:
+    - Bash & Powershell:
         - `az aks get-credentials -n $aks_name -g $resource_group_name`
 5. Install your aci-helloworld to the cluster with `helm install aci-helloworld ./aci-hello -f aci-hello/values.yaml --set image.repository=acrtest1dfsa23.azurecr.io/aci-helloworld --set image.tag=latest`
