@@ -20,7 +20,8 @@ This needs to be done, before you do anything of Day 1 or Day 2
 4. install your aci-helloworld to the cluster with `helm install aci-helloworld ./aci-hello -f aci-hello/values.yaml --set image.repository=acrtest1dfsa23.azurecr.io/aci-helloworld --set image.tag=latest`
 5. install argocd
   - `helm repo add argocd https://argoproj.github.io/argo-helm`
-  - `helm install argocd argo/argo-cd`
+  - `helm install argocd argo/argo-cd -n argocd --create-namespace`
+  > if you had argocd installed before, add --set crds.install=false
 6. access argocd
   - `kubectl port-forward service/argocd-server -n default 8080:443`
   - get the secret with `kubectl -n default get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`
