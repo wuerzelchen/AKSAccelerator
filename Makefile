@@ -12,7 +12,7 @@ output_%:
 
 # terraform apply
 apply_%:
-	@pushd Environment/$* && terraform apply -auto-approve -var acr_name=$(shell cd Environment/Shared && terraform output acr_name && cd ../..) && popd
+	@pushd Environment/$* && terraform apply -auto-approve && popd
 
 # terraform destroy
 destroy_%:
