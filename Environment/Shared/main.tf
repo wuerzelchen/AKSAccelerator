@@ -29,3 +29,9 @@ resource "azurerm_resource_group" "rg" {
   name     = "rg"
   location = "westeurope"
 }
+
+# variable acr_name
+variable "acr_name" {
+  type        = string
+  description = "The name of the Azure Container Registry."
+}
