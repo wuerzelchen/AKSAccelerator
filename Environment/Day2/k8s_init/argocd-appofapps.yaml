@@ -6,15 +6,15 @@ metadata:
 spec:
   destination:
     namespace: argocd
-    server: https://kubernetes.default.svc
+    server: "https://kubernetes.default.svc"
   project: default
   source:
-    directory:
-      jsonnet: {}
-      recurse: true
-    path: ./
-    repoURL: https://github.com/wuerzelchen/project-deployment-dev
+    path: .
+    repoURL: "https://github.com/wuerzelchen/project-deployment-dev"
     targetRevision: HEAD
   syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
