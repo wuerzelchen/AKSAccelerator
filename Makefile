@@ -20,10 +20,11 @@ destroy_%:
 
 build_day2:
 	@$(MAKE) init_Shared
-	@$(MAKE) apply_Shared
+	@$(MAKE) apply_Shared $1
 	@$(MAKE) init_Day2
 	@$(MAKE) apply_Day2
 	@$(MAKE) aks_get_credentials
+	@$(MAKE) .acr_build
 	@$(MAKE) helm_package
 	@$(MAKE) install_argocd
 	@$(MAKE) k8s_init
@@ -41,6 +42,9 @@ aks_get_credentials:
 
 # apply all files from Environment/Day2/k8s_init
 k8s_init:
+	yq -i '. | select(.stringData | has("password")) .stringData.password = $(shell cd Environment/Shared && terraform output acr_password)' Environment/Day2/k8s_init/argocd-repositories.yaml
+	yq -i '. | select(.stringData | has("password")) .stringData.username = $(shell cd Environment/Shared && terraform output acr_username)' Environment/Day2/k8s_init/argocd-repositories.yaml
+	yq -i '. | select(.stringData | has("password")) .stringData.url = $(shell cd Environment/Shared && terraform output acr_login_server)' Environment/Day2/k8s_init/argocd-repositories.yaml
 	@kubectl apply -f Environment/Day2/k8s_init
 
 # login to helm repository with the terraform output of shared, acr_login_server
@@ -48,13 +52,17 @@ k8s_init:
 	echo "Login to Helm"
 	@helm registry login $(shell cd Environment/Shared && terraform output acr_login_server) --username $(shell cd Environment/Shared && terraform output acr_username) --password $(shell cd Environment/Shared && terraform output acr_password)
 
-# create a helm package for Evinronment/Day2/aci-hello and push to the acr with the terraform output of day2, acr_name
+# create a helm package for Code/Day2/aci-hello and push to the acr with the terraform output of day2, acr_name
 helm_package:
 	echo "Create Helm Package"
-	@helm package Environment/Day2/aci-hello
+	@helm package Code/Day2/aci-hello
 	$(MAKE) .helm_login
-	@helm push aci-hello-0.1.0.tgz oci://$(shell cd Environment/Shared && terraform output acr_login_server) 
+	@helm push aci-hello-0.1.1.tgz oci://$(shell cd Environment/Shared && terraform output acr_login_server) 
+
+# acr build container
+.acr_build:
+	@az acr build --registry $(shell cd Environment/Shared && terraform output acr_name) --image aci-hello:latest Code/Day1/BuildContainerDemo/
 
 install_argocd:
 	@helm repo add argo https://argoproj.github.io/argo-helm
-	@helm install argocd argo/argo-cd -n argocd --create-namespace
+	@helm upgrade --install argocd argo/argo-cd -n argocd --create-namespace

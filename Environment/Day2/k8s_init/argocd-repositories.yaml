@@ -18,7 +18,7 @@ metadata:
 stringData:
   type: helm
   name: helm-oci
-  url: acr3efn4.azurecr.io
+  url: wkshp3efn4.azurecr.io
   enableOCI: "true"
-  username: acr3efn4
-  password: Xs0Q0tWWDNR7o3tK8neBDbjXv7a+xhY3/Hsg5l12Di+ACRD7WVYE
+  username: wkshp3efn4
+  password: 38nRj0CNGa/YMF9b7KEKTyh5JOqV9NNOl0ULnYHlW/+ACRD+dwfe

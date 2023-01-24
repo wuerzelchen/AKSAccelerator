@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: acrtest1dfsa23.azurecr.io/aci-helloworld
+  repository: acrtest1dfsa23.azurecr.io/aci-hello
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
