@@ -7,7 +7,7 @@ locals {
     upper   = false
   }
   # use random_string as a suffix for dns_name_label
-  acr_name = format("acr%s", random_string.random_string.result)
+  acr_name = format("wkshp%s", random_string.random_string.result)
 }
 # add random_string resource
 resource "random_string" "random_string" {
