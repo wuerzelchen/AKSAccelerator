@@ -18,9 +18,12 @@ apply_%:
 destroy_%:
 	@pushd Environment/$* && terraform destroy -auto-approve -var acr_name=$(shell cd Environment/Shared && terraform output acr_name && cd ../..) && popd
 
+destroy_Shared:
+	@pushd Environment/Shared && terraform destroy -auto-approve && popd
+
 build_day2:
 	@$(MAKE) init_Shared
-	@$(MAKE) apply_Shared $1
+	@$(MAKE) apply_Shared
 	@$(MAKE) init_Day2
 	@$(MAKE) apply_Day2
 	@$(MAKE) aks_get_credentials
@@ -32,8 +35,11 @@ build_day2:
 # terraform destroy all
 destroy_all:
 # destroy all environments Shared, Day1, Day2 with calling destroy_% target
+	@echo "Destroy day2"
 	@$(MAKE) destroy_Day2
+	@echo "Destroy day1"
 	@$(MAKE) destroy_Day1
+	@echo "Destroy shared"
 	@$(MAKE) destroy_Shared
 
 # do an az aks get-credentials with the terraform output of day2, aks_name and aks_rg
