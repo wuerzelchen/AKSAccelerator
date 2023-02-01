@@ -16,7 +16,7 @@ apply_%:
 
 # terraform destroy
 destroy_%:
-	@pushd Environment/$* && terraform destroy -auto-approve -var acr_name=$(shell cd Environment/Shared && terraform output acr_name && cd ../..) && popd
+	@pushd Environment/$* && terraform destroy -lock=false -auto-approve -var acr_name=$(shell cd Environment/Shared && terraform output acr_name && cd ../..) && popd
 
 destroy_Shared:
 	@pushd Environment/Shared && terraform destroy -auto-approve && popd
