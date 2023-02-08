@@ -2,7 +2,7 @@
 **/obj/*
 # Local .terraform directories
 **/.terraform/*
-
+**.tgz
 # .tfstate files
 *.tfstate
 *.tfstate.*
