@@ -23,13 +23,18 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   dns_prefix          = local.dns_prefix
-  kubernetes_version  = "1.24"
+  kubernetes_version  = "1.25.4"
 
-
+  #http routing enabled
+  http_application_routing_enabled = false
+  # automatic upgrade channel patching
+  automatic_channel_upgrade = "patch"
   default_node_pool {
     name       = "default"
     node_count = 1
     vm_size    = "Standard_DS2_v2"
+    # define node pool version
+    orchestrator_version = "1.25.4"
   }
 
   identity {
