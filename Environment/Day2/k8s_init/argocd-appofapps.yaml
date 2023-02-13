@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: project-dev
+  name: operations-deployment-prod
   namespace: argocd
 spec:
   destination:
@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     path: .
-    repoURL: "https://github.com/wuerzelchen/project-deployment-dev"
+    repoURL: "https://github.com/wuerzelchen/operations-deployment-prod"
     targetRevision: HEAD
   syncPolicy:
     automated:

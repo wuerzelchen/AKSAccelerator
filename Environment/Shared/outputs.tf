@@ -18,3 +18,7 @@ output "acr_password" {
   value     = azurerm_container_registry.acr.admin_password
   sensitive = true
 }
+
+output "rg_name" {
+  value = azurerm_resource_group.rg.name
+}

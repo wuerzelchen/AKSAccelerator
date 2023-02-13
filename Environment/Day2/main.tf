@@ -26,12 +26,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   kubernetes_version  = "1.25.4"
 
   #http routing enabled
-  http_application_routing_enabled = false
+  http_application_routing_enabled = true
   # automatic upgrade channel patching
   automatic_channel_upgrade = "patch"
   default_node_pool {
     name       = "default"
-    node_count = 1
+    node_count = 2
     vm_size    = "Standard_DS2_v2"
     # define node pool version
     orchestrator_version = "1.25.4"
