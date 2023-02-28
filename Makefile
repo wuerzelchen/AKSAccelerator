@@ -14,6 +14,9 @@ output_%:
 apply_%:
 	@pushd Environment/$* && terraform apply -auto-approve && popd
 
+.apply_day2:
+	@pushd Environment/Day2 && terraform apply -auto-approve -var acr_name=$(shell cd Environment/Shared && terraform output acr_name && cd ../..) && popd
+
 # terraform destroy
 destroy_%:
 	@pushd Environment/$* && terraform destroy -lock=false -auto-approve -var acr_name=$(shell cd Environment/Shared && terraform output acr_name && cd ../..) && popd
@@ -25,7 +28,7 @@ build_day2:
 	@$(MAKE) init_Shared
 	@$(MAKE) apply_Shared
 	@$(MAKE) init_Day2
-	@$(MAKE) apply_Day2
+	@$(MAKE) .apply_Day2
 	@$(MAKE) aks_get_credentials
 	@$(MAKE) .acr_build
 	@$(MAKE) helm_package
