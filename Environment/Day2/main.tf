@@ -7,9 +7,11 @@ locals {
     upper   = false
   }
   # use random_string as a suffix for dns_name_label
-  dns_prefix = format("aci-%s", random_string.random_string.result)
-  acr_name   = var.acr_name
-  aks_name   = format("aks-%s", random_string.random_string.result)
+  dns_prefix                 = format("aci-%s", random_string.random_string.result)
+  acr_name                   = var.acr_name
+  aks_name                   = format("aks-%s", random_string.random_string.result)
+  aad_admin_group_object_ids = var.aad_admin_group_object_ids
+  aad_rbac_enabled           = var.aad_rbac_enabled
 }
 # add random_string resource
 resource "random_string" "random_string" {
@@ -36,7 +38,14 @@ resource "azurerm_kubernetes_cluster" "aks" {
     # define node pool version
     orchestrator_version = "1.25.4"
   }
-
+  # AKS Cluster login definition
+  role_based_access_control_enabled = true
+  local_account_disabled            = true
+  azure_active_directory_role_based_access_control {
+    managed                = true
+    azure_rbac_enabled     = local.aad_rbac_enabled
+    admin_group_object_ids = local.aad_admin_group_object_ids
+  }
   identity {
     type = "SystemAssigned"
   }
@@ -49,13 +58,4 @@ resource "azurerm_role_assignment" "example" {
   skip_service_principal_aad_check = true
 }
 
-# data resource for azure container registry
-data "azurerm_container_registry" "acr" {
-  name                = local.acr_name
-  resource_group_name = data.azurerm_resource_group.rg.name
-}
 
-# data resource for azure resource group
-data "azurerm_resource_group" "rg" {
-  name = "rg"
-}

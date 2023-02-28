@@ -14,6 +14,9 @@ This needs to be done, before you do anything of Day 1
 2. apply everything to your environment with `terraform apply`
 
 ## Day 2
-1. run `make build_day2` in the repo folder, where the Makefile is in
+Prerequisites:
+- you do need an Azure Active Directory Group where all your admins are in, who should get acccess to the AKS Cluster
+- you need to install kubelogin with `az aks installcli` or with brew `brew install Azure/kubelogin/kubelogin`
+1. run `make build_day2 ADMIN_OBJECT_IDS='[\"<object_id of the aad admin group>\"]'` in the repo folder, where the Makefile is in
 2. at the end, there is an output from argocd how you access it and how you get the credentials
-3. change to the correct ACR registry in your `App of Apps Repository`in this example it will be the `project-development-dev` repository
+3. change to the correct ACR registry in your `App of Apps Repository` in this example it will be the `project-development-dev` repository
